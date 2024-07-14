@@ -13,6 +13,7 @@ import numpy as np
 from opensimplex import OpenSimplex
 import pyqtgraph.opengl as gl
 from pyqtgraph.Qt import QtCore, QtGui
+from PyQt5.QtGui import QQuaternion #For Rotations
 import struct
 import pyaudio
 import sys
@@ -122,6 +123,11 @@ class Terrain(object):
 
         verts, faces, colors = self.mesh(offset=self.offset, wf_data=wf_data)
         self.mesh1.setMeshData(vertexes=verts, faces=faces, faceColors=colors)
+
+        q = QQuaternion(1, 0, 0, 1).normalized() #For rotation around the z-axis. Can be commented out or changed to rotate in other directions
+        axis, angle = q.getAxisAndAngle()
+        self.mesh1.rotate(1, axis.x(), axis.y(), axis.z())
+        
         self.offset -= 0.05
 
     def start(self):
